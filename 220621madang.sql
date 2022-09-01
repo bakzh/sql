@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 create or replace procedure exce9_3
 as
   cursor c1 is select t1.publisher, t1.bookname, t1.price
@@ -79,6 +80,26 @@ begin
     exit when c1%notfound;
     
     dbms_output.put_line('고객명 : ' || lv_name || ' 도서 수 : ' || lv_cnt || ' 총 구매액 : ' || lv_saleprice);
+=======
+create or replace procedure exce9_4
+
+as
+   cursor c1 is select t2.name, count(*), sum(saleprice)
+                 from orders t1, customer t2
+                where t1.custid = t2.custid
+             group by t1.custid,t2.name;
+  lv_name      customer.name%type;
+  lv_cnt       number;
+  lv_saleprice number;
+             
+begin
+  open c1;
+  loop
+    fetch c1 into lv_name,lv_cnt,lv_saleprice;
+    exit when c1%notfound;
+    
+    dbms_output.put_line('고객명 : ' || lv_name || ' 도서 수 : ' || lv_cnt || ' 총 구매액 : '|| lv_saleprice);
+>>>>>>> ab71efcdff0573fd980254559c09cec99686a8ac
   end loop;  
   exception 
     when others then
@@ -130,12 +151,17 @@ as
                 where t1.custid = t2.custid(+)
              group by t1.name; 
   lv_name       customer.name%type;
+<<<<<<< HEAD
   lv_saleprice  orders.saleprice%type; 
+=======
+  lv_saleprice  orders.saleprice%type;
+>>>>>>> ab71efcdff0573fd980254559c09cec99686a8ac
 begin
   open c1;
   loop
     fetch c1 into lv_name,lv_saleprice;
     exit when c1%notfound;
+<<<<<<< HEAD
     
     if lv_saleprice != 0 then
       dbms_output.put_line('고객명 : ' || lv_name || ' 주문 총액 : ' || lv_saleprice);
@@ -146,9 +172,27 @@ begin
     exception 
     when others then
       dbms_output.put_line('기타 오류 발생 : ' || SQLERRM(SQLCODE));
+=======
+  if lv_saleprice != 0 then
+    dbms_output.put_line('고객명 : ' || lv_name || ' 주문 총액 : ' || lv_saleprice);
+  else
+        dbms_output.put_line('고객명 : ' || lv_name);
+  end if;
+  end loop;
+ exception 
+    when others then
+      dbms_output.put_line('기타 오류 발생 : ' || SQLERRM(SQLCODE));
+
+>>>>>>> ab71efcdff0573fd980254559c09cec99686a8ac
 end;
 
 set serveroutput on;
 exec exce9_5;
+<<<<<<< HEAD
                      
                       
+=======
+
+
+
+>>>>>>> ab71efcdff0573fd980254559c09cec99686a8ac
