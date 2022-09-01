@@ -17,7 +17,7 @@ rollback;
 select product_id, pname, quantity, price
   from product;
   
-delete from product;
+delete from product where product_id=87;
 commit;
 
 select product_product_id_seq.nextval
