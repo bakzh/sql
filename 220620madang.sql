@@ -1,3 +1,8 @@
+<<<<<<< HEAD
+SET SERVEROUTPUT ON;
+
+=======
+>>>>>>> ab71efcdff0573fd980254559c09cec99686a8ac
 declare
 --사용자 레코드 타입 정의
 --  type rec_book is record (
@@ -28,6 +33,11 @@ begin
       dbms_output.put_line('기타 예외가 발생되었습니다');
 end;
 
+<<<<<<< HEAD
+select * from book;
+
+=======
+>>>>>>> ab71efcdff0573fd980254559c09cec99686a8ac
 
 --'1~10까지의 합 - for문'
 declare
@@ -83,6 +93,10 @@ begin
                          rpad(ls_book.bookname,20) || 
                          rpad(ls_book.publisher,10) || 
                          lpad(ls_book.price,10));
+<<<<<<< HEAD
+  close cursor;
+=======
+>>>>>>> ab71efcdff0573fd980254559c09cec99686a8ac
   end loop;  
 --  exception
 end;
@@ -127,6 +141,16 @@ end;
 
 
 CREATE OR REPLACE TRIGGER book_resourse
+<<<<<<< HEAD
+   BEFORE insert OR update OR delete ON book
+declare
+  --my_exception exception;  
+BEGIN
+   IF TO_CHAR(SYSDATE,'DY') IN ('월')
+      OR TO_NUMBER(TO_CHAR(SYSDATE,'HH24'))
+         NOT BETWEEN 9 AND 18 THEN
+      
+=======
 	BEFORE insert OR update OR delete ON book
 declare
   --my_exception exception;  
@@ -135,12 +159,17 @@ BEGIN
 		OR TO_NUMBER(TO_CHAR(SYSDATE,'HH24'))
 			NOT BETWEEN 9 AND 18 THEN
 		
+>>>>>>> ab71efcdff0573fd980254559c09cec99686a8ac
     --에러코드 -20000~20999까지 임의로 지정 가능
     --에러메세지 개발자 임의로 지정
     raise_application_error(-20000,'작업할 수 없는 시간 입니다.');
     --raise_application_error(-20502,'작업할 수 없는 시간 입니다.');
 --    raise my_exception;
+<<<<<<< HEAD
+   END IF;
+=======
 	END IF;
+>>>>>>> ab71efcdff0573fd980254559c09cec99686a8ac
   
 END;
 

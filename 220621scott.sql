@@ -4,7 +4,11 @@ create sequence emp_audit_row_no_seq
   start with 1
   increment by 1
   minvalue 1
+<<<<<<< HEAD
+  maxvalue 99999999
+=======
   maxvalue 9999999999
+>>>>>>> ab71efcdff0573fd980254559c09cec99686a8ac
   nocycle
   nocache;
 --테이블생성
@@ -32,19 +36,32 @@ delete from emp where empno = 8000;
 rollback; 
 select emp_audit_row_no_seq.currval
   from dual;
+<<<<<<< HEAD
+drop procedure exercise_1;
+--322-1 EMP TABLE에 이름,사번,급여,부서번호를 전달받아 등록하는 PROCEDURE를 작성하여라.
+create procedure exercise_1(
+  p_empno   in emp.empno%type,
+  p_ename   in emp.ename%type,
+=======
   
 --322-1  
 create procedure exercise_1(
   p_ename   in emp.ename%type,
   p_empno   in emp.empno%type,
+>>>>>>> ab71efcdff0573fd980254559c09cec99686a8ac
   p_sal     in emp.sal%type,
   p_deptno  in emp.deptno%type
 )
 as
 
 begin
+<<<<<<< HEAD
+  insert into emp(empno, ename, sal, deptno)
+    values ( p_empno, p_ename, p_sal, p_deptno);
+=======
   insert into emp (empno,ename,sal,deptno) 
     values (p_empno,p_ename,p_sal,p_deptno);
+>>>>>>> ab71efcdff0573fd980254559c09cec99686a8ac
   exception
     when others then
       dbms_output.put_line('기타오류발생');     
@@ -53,17 +70,29 @@ end;
 execute exercise_1(8000,'gildong',5000,10);
 select * from emp;
 
+<<<<<<< HEAD
+--322-2 사원번호를 입력받아 급여를 수정하는 PROCEDURE를 작성하여라.
+=======
 --322-2
+>>>>>>> ab71efcdff0573fd980254559c09cec99686a8ac
 create or replace procedure exercise_2(
   p_empno  in emp.empno%type,
   p_sal    in emp.sal%type
 )
 as
+<<<<<<< HEAD
+  
+begin
+  update emp
+     set sal = p_sal
+   where empno = p_empno; 
+=======
 
 begin
   update emp
      set sal = p_sal
    where empno = p_empno;
+>>>>>>> ab71efcdff0573fd980254559c09cec99686a8ac
   exception
     when others then
       dbms_output.put_line ('기타오류 발생 : ' || SQLCODE || '-' || SQLERRM);
@@ -72,6 +101,23 @@ end;
 exec exercise_2(8000,6000);
 select * from emp where empno = 8000;
   
+<<<<<<< HEAD
+--322-3 최고의 월급을 받는 사원의 사번을 구하여 출력하는 PROCEDURE를 작성하여라. 
+create or replace procedure exercise_3
+as
+  type array_empno_t is table of emp.empno%type
+    index by binary_integer;
+   la_empnos  array_empno_t;
+begin
+  select empno
+    bulk collect into la_empnos
+    from emp
+   where sal = (select max(sal) 
+                  from emp);
+  for idx in 1..la_empnos.count loop
+  dbms_output.put_line('최고의 월급을 받는 사원번호 : ' || la_empnos(idx));
+  end loop;
+=======
 --322-3
 create or replace procedure exercise_3
 as
@@ -88,6 +134,7 @@ begin
   dbms_output.put_line('최고의 월급을 받는 사원번호 : ' || la_empnos(idx));     
   end loop;
   
+>>>>>>> ab71efcdff0573fd980254559c09cec99686a8ac
   exception
     when others then
       dbms_output.put_line ('기타오류 발생 : ' || SQLCODE || '-' || SQLERRM);
@@ -96,6 +143,16 @@ set serveroutput on;
 exec exercise_3; 
  
 
+<<<<<<< HEAD
+--322-4 이름을 입력받아 부서명을 구하여 출력하는 PROCEDURE를 작성하여라.
+create or replace procedure exercise_4(
+  p_ename  in emp.ename%type
+)as
+  lv_dname  dept.dname%type;
+begin
+  select t2.dname into lv_dname
+    from emp t1,dept t2
+=======
 --322-4 
 create or replace procedure exercise_4(
   p_ename  in emp.ename%type
@@ -104,6 +161,7 @@ create or replace procedure exercise_4(
 begin
   select t2.dname into lv_dname
     from emp t1, dept t2
+>>>>>>> ab71efcdff0573fd980254559c09cec99686a8ac
    where t1.deptno = t2.deptno
      and t1.ename = p_ename;
   dbms_output.put_line(p_ename || '님의 부서는 ' || lv_dname || '입니다');   
@@ -112,12 +170,20 @@ begin
       dbms_output.put_line ('기타오류 발생 : ' || SQLCODE || '-' || SQLERRM);
 end;
 
+<<<<<<< HEAD
+set serveroutput on; 
+=======
+>>>>>>> ab71efcdff0573fd980254559c09cec99686a8ac
 exec exercise_4('gildong');
 
 
 --322-5
 create or replace function exercise_5(
+<<<<<<< HEAD
+  p_deptno in  emp.deptno%type
+=======
   p_deptno  in  emp.deptno%type
+>>>>>>> ab71efcdff0573fd980254559c09cec99686a8ac
 )return emp.sal%type
 as
   lv_max_sal  emp.sal%type; 
@@ -134,7 +200,11 @@ begin
 end;
 
 var g_max_sal number;
+<<<<<<< HEAD
+execute :g_max_sal := exercise_5(10);
+=======
 execute :g_max_sal := exercise_5(20);
+>>>>>>> ab71efcdff0573fd980254559c09cec99686a8ac
 print g_max_sal;
 
 create or replace procedure exercise_5_2(
@@ -193,4 +263,8 @@ update emp
  where empno = 8000;  
 
 delete from emp where empno = 8000;
+<<<<<<< HEAD
 insert into emp values (8000,'gildong','MANAGER',null,'20220621',5000,null,10);
+=======
+insert into emp values (8000,'gildong','MANAGER',null,'20220621',5000,null,10);
+>>>>>>> ab71efcdff0573fd980254559c09cec99686a8ac
