@@ -32,8 +32,7 @@ select member_id,email,pw,nickname,cdate,udate
  where member_id = 1;                          
                         
 update member 
-   set pw = 'naim5678',
-       nickname =  '로니콜먼5',
+   set nickname =  '로니콜먼5',
        udate = systimestamp
  where member_id = 2;
  
@@ -47,3 +46,4 @@ select MEMBER_MEMBER_ID_SEQ.currval from dual;
  
 rollback;
 select * from member;
+delete from member;
