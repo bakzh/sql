@@ -41,3 +41,7 @@ select * from member;
 update member set mempw = 'naim2222', memtel = '010-3333-3333', memnickname = '테스터2',
 mememail = 'test2@test.com', memname = '박지훈2',memudate = sysdate 
 where mempw = 'naim1111';
+
+delete member where mempw = 'naim1111';
+
+commit;
