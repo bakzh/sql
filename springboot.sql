@@ -6,4 +6,7 @@ delete from product;
 select *
   from (select rownum no, product_Id,pname,quantity,price
           from product) t1
- where t1.no between 11 and 20;         
+ where t1.no between 11 and 20;   
+ 
+select * from member;
+delete from member;

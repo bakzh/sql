@@ -35,19 +35,19 @@ SELECT fcno cnt from facility
 
 -- 운동시설 저장
 insert into facility values
-      (facility_fcno_seq.nextval, '운동시설bb2', '당구장업', null, '010-1111-2222',
-      36.9626006263, 127.2392144698, '서울특별시 yyy', 27472, '폐업',
-      'https://cdn.pixabay.com/photo/2020/04/03/20/49/gym-5000169_960_720.jpg',3);
-
+      (facility_fcno_seq.nextval, '남bb2', '당구장업', null, '010-1111-2222',
+      36.9626006263, 127.2392144698, '서울특별시 zzz', 27472, '폐업',
+      'https://cdn.pixabay.com/photo/2020/04/03/20/49/gym-5000169_960_720.jpg',1);
 
 -- 즐겨찾기 추가
 insert into bookmark
-values(bookmark_bmno_seq.nextval, 21, 3);
+values(bookmark_bmno_seq.nextval, 21, 42);
 
 -- 회원의 즐겨찾기 리스트 조회
 select * from bookmark
 where memno = 21;
 
+select * from review;
 select * from facility;
 
 select t2.FCIMG,t2.FCADDR, t2.FCTEL,t2.FCSCORE
@@ -58,6 +58,12 @@ commit;
 
  select FACILITY.FCIMG fcimg,FACILITY.FCADDR fcaddr, FACILITY.FCTEL fctel, FACILITY.FCSCORE fcscore, FACILITY.FCNAME fcname
    from BOOKMARK, FACILITY, MEMBER
-  where BOOKMARK.FCNO=FACILITY.FCNO and BOOKMARK.memno = MEMBER.memno;
+  where BOOKMARK.FCNO=FACILITY.FCNO and BOOKMARK.memno = MEMBER.memno
+  order by bookmark.bmno asc;
+  
+   select FACILITY.FCIMG fcimg,FACILITY.FCADDR fcaddr, FACILITY.FCTEL fctel, FACILITY.FCSCORE fcscore, FACILITY.FCNAME fcname
+   from BOOKMARK, FACILITY, MEMBER
+  where BOOKMARK.FCNO=FACILITY.FCNO and BOOKMARK.memno = MEMBER.memno
+  order by bookmark.bmno desc;
 
 
