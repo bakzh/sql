@@ -1,3 +1,24 @@
+  INSERT INTO BOARD (BDNO, BDCG,BDTITLE,MEMNO,BDCONTENT)
+  VALUES (BOARD_BDNO_SEQ.nextval, '자유게시판','제목1',2,'본문내용입니다.');
+
+  INSERT INTO BOARD (BDNO, BDCG,BDTITLE,MEMNO,BDCONTENT)
+  VALUES (BOARD_BDNO_SEQ.nextval, '자유게시판','제목2',2,'본문내용입니다.');
+
+  INSERT INTO BOARD (BDNO, BDCG,BDTITLE,MEMNO,BDCONTENT)
+  VALUES (BOARD_BDNO_SEQ.nextval, '자유게시판','제목3',2,'본문내용입니다.');
+
+
+select * from board;
+
+
+
+
+
+
+
+
+
+
 select * from member;
 select * from review;
 
@@ -5,8 +26,9 @@ select count(mememail)
   from member
  where mememail = 'test3@test.com'; 
 
+-- 리뷰 등록
 insert into review
-values(review_rvno_seq.nextval, '시설이 좋아요2', 2.2, sysdate, sysdate, 21, 1);
+values(review_rvno_seq.nextval, '시설이 좋아요1', 4.5, sysdate, sysdate, 3, 1);
 
  select review.RVCONTENTS, review.RVCDATE, review.RVSCORE
   from  member, review
@@ -19,7 +41,7 @@ values(review_rvno_seq.nextval, '시설이 좋아요2', 2.2, sysdate, sysdate, 21, 1);
    from member, board
   where member.MEMNO = board.MEMNO;
 
- select reply.RPCOMMENT rpcomment ,reply.RPCDATE rpcdate,BOARD.BDTITLE bdtitle
+ select BOARD.bdno bdno, reply.RPCOMMENT rpcomment ,reply.RPCDATE rpcdate,BOARD.BDTITLE bdtitle
    from MEMBER, BOARD, reply 
   where MEMBER.MEMNO = BOARD.MEMNO and MEMBER.MEMNO = reply.MEMNO;
   
@@ -35,7 +57,7 @@ SELECT fcno cnt from facility
 
 -- 운동시설 저장
 insert into facility values
-      (facility_fcno_seq.nextval, '남bb2', '당구장업', null, '010-1111-2222',
+      (facility_fcno_seq.nextval, '강bb2', '당구장업', null, '010-1111-2222',
       36.9626006263, 127.2392144698, '서울특별시 zzz', 27472, '폐업',
       'https://cdn.pixabay.com/photo/2020/04/03/20/49/gym-5000169_960_720.jpg',1);
 
@@ -49,6 +71,7 @@ where memno = 21;
 
 select * from review;
 select * from facility;
+delete  from facility;
 
 select t2.FCIMG,t2.FCADDR, t2.FCTEL,t2.FCSCORE
   from BOOKMARK t1,FACILITY t2, member t3
@@ -65,5 +88,9 @@ commit;
    from BOOKMARK, FACILITY, MEMBER
   where BOOKMARK.FCNO=FACILITY.FCNO and BOOKMARK.memno = MEMBER.memno
   order by bookmark.bmno desc;
+  
+ select reply.RPCOMMENT rpComment, reply.RPCDATE rpCDate ,BOARD.bdno bdno, BOARD.BDTITLE bdtitle
+  from MEMBER, BOARD, reply
+  where MEMBER.MEMNO = BOARD.MEMNO and MEMBER.MEMNO = reply.MEMNO;
 
 

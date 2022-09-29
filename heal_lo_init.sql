@@ -1,10 +1,10 @@
 drop table uploadfile;
 drop table bookmark;
+drop table reply;
 drop table Board;
 drop table Calendar;
 drop table review;
 drop table member;
-DROP TABLE REPLY;
 drop table code;
 
 drop sequence member_memno_seq;
@@ -13,6 +13,7 @@ drop sequence uploadfile_ufno_seq;
 drop sequence CALENDAR_CDNO_SEQ;
 drop sequence board_BDNO_seq;
 drop sequence bookmark_bmno_seq;
+drop sequence reply_rpno_seq;
 
 -- code 테이블
 create table code (
@@ -29,6 +30,7 @@ insert into code values('RV000','리뷰','',null,'Y',systimestamp,systimestamp);
 insert into code values('BD000','게시판','',null,'Y',systimestamp,systimestamp);
 insert into code values('CD000','캘린더','',null,'Y',systimestamp,systimestamp);
 
+
 -- 회원
 create table member (
                         memno          number(8),
@@ -37,8 +39,9 @@ create table member (
                         memtel         varchar2(13),
                         memnickname    varchar2(30),
                         mememail       varchar2(30),
-                        memname        varchar2(12),
+                        memname        varchar2(30),
                         memcode        varchar2(15),
+                        memstatus      varchar2(15),
                         memcdate       date,
                         memudate       date
 );
@@ -57,6 +60,8 @@ alter table member add constraint memid_uk unique (memid);
 alter table member add constraint memtel_uk unique (memtel);
 alter table member add constraint memnickname_uk unique (memnickname);
 alter table member add constraint mememail_uk unique (mememail);
+alter table member add constraint memcode_ck check(memcode in ('NORMAL','ADMIN'));
+alter table member add constraint memstatus_ck check(memstatus in ('JOIN','WITHDRAW'));
 
 -- 회원 시퀀스
 create sequence member_memno_seq;
@@ -98,35 +103,50 @@ alter table review add constraint review_fcno_fk foreign key (fcno)
     references facility(fcno);
 alter table review add constraint review_memno_fk foreign key (memno)
     references member(memno);
-alter table review modify rvcontents constraint review_rvcontents_nn not null;
 alter table review modify rvscore constraint review_rvscore_nn not null;
 alter table review modify rvcdate constraint review_rvcdate_nn not null;
 alter table review modify rvudate constraint review_rvudate_nn not null;
 alter table review modify fcno constraint review_fcno_nn not null;
 alter table review modify memno constraint review_memno_nn not null;
+alter table review modify rvcontents constraint review_rvcontents_nn not null;
 alter table review add constraint review_rvscore_ck check (rvscore between 0 and 5);
 alter table review add constraint review_rvline_ck check (rvline <= 50);
 
 -- 리뷰 시퀀스
 create sequence review_rvno_seq;
 
--- 게시판
-CREATE TABLE Board (
-                       BDNO NUMBER(8) PRIMARY KEY,
-                       BDCG NUMBER(10),
-                       BDTITLE VARCHAR2(150),
-                       MEMNO NUMBER(8) REFERENCES Member(memno),
-                       BDCONTENT CLOB,
-                       BDGROUP NUMBER(10) NOT NULL,
-                       BDDEPTH NUMBER(10) NOT NULL,
-                       BDVIEW NUMBER(10),
-                       BDHIT NUMBER(10),
-                       BDCDATE DATE,
-                       BDUDATE DATE
+
+
+-- 게시판 글번호 시퀀스
+CREATE SEQUENCE BOARD_BDNO_SEQ START WITH 1
+    INCREMENT BY 1;
+
+-- 게시판 테이블
+CREATE TABLE BOARD (
+                       BDNO          NUMBER(8),
+                       BDCG 		      VARCHAR2(20),
+                       BDTITLE 		  VARCHAR2(100),
+                       MEMNO 	      NUMBER(8),
+                       BDCONTENT 	  CLOB,
+                       BDVIEW        NUMBER(8)DEFAULT 0,
+                       BDHIT         NUMBER(8)DEFAULT 0,
+                       BDCDATE       timestamp default systimestamp,
+                       BDUDATE       timestamp default systimestamp
 );
 
--- 게시판 시퀀스
-create sequence board_BDNO_seq;
+--게시판 제약조건
+ALTER TABLE BOARD ADD CONSTRAINT BOARD_BDNO_PK PRIMARY KEY (BDNO);
+ALTER TABLE BOARD ADD CONSTRAINT BOARD_MEMNO_FK FOREIGN KEY (MEMNO)
+    REFERENCES MEMBER(MEMNO);
+ALTER TABLE BOARD MODIFY BDCG CONSTRAINT BOARD_BDCG_NN NOT NULL;
+ALTER TABLE BOARD MODIFY BDTITLE CONSTRAINT BOARD_BDTITLE_NN NOT NULL;
+ALTER TABLE BOARD MODIFY MEMNO CONSTRAINT BOARD_MEMNO_NN NOT NULL;
+ALTER TABLE BOARD MODIFY BDCONTENT CONSTRAINT BOARD_BDCONTENT_NN NOT NULL;
+ALTER TABLE BOARD MODIFY BDVIEW CONSTRAINT BOARD_BDVIEW_NN NOT NULL;
+ALTER TABLE BOARD MODIFY BDHIT CONSTRAINT BOARD_BDHIT_NN NOT NULL;
+ALTER TABLE BOARD MODIFY BDCDATE CONSTRAINT BOARD_BDCDATE_NN NOT NULL;
+ALTER TABLE BOARD MODIFY BDUDATE CONSTRAINT BOARD_BDUDATE_NN NOT NULL;
+
 
 -- 캘린더
 CREATE TABLE Calendar (
@@ -176,3 +196,31 @@ alter table uploadfile modify ufsize constraint uploadfile_ufsize_nn not null;
 alter table uploadfile modify uftype constraint uploadfile_uftype_nn not null;
 alter table uploadfile modify ufpath constraint uploadfile_ufpath_nn not null;
 alter table uploadfile add constraint uploadfile_ufsname_uk unique (ufsname);
+
+-- 댓글테이블
+CREATE TABLE REPLY (
+                       RPNO        NUMBER(8),
+                       BDNO 		    NUMBER(8),
+                       RPGROUP     NUMBER(10),
+                       RPDEPTH     NUMBER(10),
+                       MEMNO       NUMBER(8),
+                       RPCOMMENT 	CLOB,
+                       RPCDATE     timestamp default systimestamp,
+                       RPUDATE     timestamp default systimestamp
+);
+
+-- 댓글번호 시퀀스
+CREATE SEQUENCE REPLY_RPNO_SEQ START WITH 1
+    INCREMENT BY 1;
+
+-- 제약조건
+ALTER TABLE REPLY ADD CONSTRAINT REPLY_RPNO_PK PRIMARY KEY (RPNO);
+ALTER TABLE REPLY ADD CONSTRAINT REPLY_BDNO_FK FOREIGN KEY (BDNO)
+    REFERENCES BOARD(BDNO);
+ALTER TABLE REPLY ADD CONSTRAINT REPLY_MEMNO_FK FOREIGN KEY (MEMNO)
+    REFERENCES MEMBER(MEMNO);
+ALTER TABLE REPLY MODIFY BDNO CONSTRAINT REPLY_BDNO_NN NOT NULL;
+ALTER TABLE REPLY MODIFY MEMNO CONSTRAINT REPLY_MEMNO_NN NOT NULL;
+ALTER TABLE REPLY MODIFY RPCOMMENT CONSTRAINT REPLY_RPCOMMENT_NN NOT NULL;
+ALTER TABLE REPLY MODIFY RPCDATE CONSTRAINT BOARD_RPCDATE_NN NOT NULL;
+ALTER TABLE REPLY MODIFY RPUDATE CONSTRAINT BOARD_RPUDATE_NN NOT NULL;
