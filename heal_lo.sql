@@ -1,21 +1,34 @@
-  INSERT INTO BOARD (BDNO, BDCG,BDTITLE,MEMNO,BDCONTENT)
-  VALUES (BOARD_BDNO_SEQ.nextval, '자유게시판','제목1',2,'본문내용입니다.');
+     select t3.no, t3.bdno, t3.bdcg, t3.bdtitle, t3.memno, t3.bdcontent, t3.bdcdate, t3.bdview, t3.memnickname 
+       from ( 
+      select rownum no, t1.bdno, t1.bdcg, t1.bdtitle, t1.memno, t1.bdcontent, t1.bdcdate, t1.bdview, t2.memnickname
+          from board t1, member t2 
+        where t1.memno=t2.memno 
+       order by t1.bdno desc) t3 
+      where no between 1 and 10
+         and t3.bdcg = 'BD001'
+         and t3.bdtitle like '%헬로입니다%' or t3.bdcontent like '%헬로입니다%' or t3.memnickname like '%헬로입니다%' order by no asc;
+         
+         
+         select no, t3.bdno, t3.bdcg, t3.bdtitle, t3.memno, t3.bdcontent, t3.bdcdate, t3.bdview, t3.memnickname
+           from (      select rownum no, t1.bdno, t1.bdcg, t1.bdtitle, t1.memno, t1.bdcontent, t1.bdcdate, t1.bdview, t2.memnickname        
+                         from board t1, member t2       where t1.memno=t2.memno       order by t1.bdno desc)t3
+          where no between 1 and 12
+                             and t3.bdcg = 'BD001'  
+                             AND    t3.bdtitle like '%헬로입니다%' or 
+                                    t3.bdcontent like '%헬로입니다%' or
+                                    t3.memnickname like '%헬로입니다%'
+      order by no asc;
 
-  INSERT INTO BOARD (BDNO, BDCG,BDTITLE,MEMNO,BDCONTENT)
-  VALUES (BOARD_BDNO_SEQ.nextval, '자유게시판','제목2',2,'본문내용입니다.');
-
-  INSERT INTO BOARD (BDNO, BDCG,BDTITLE,MEMNO,BDCONTENT)
-  VALUES (BOARD_BDNO_SEQ.nextval, '자유게시판','제목3',2,'본문내용입니다.');
-
-
-select * from board;
 
 
 
 
+ INSERT INTO BOARD (BDNO, BDCG,BDTITLE,MEMNO,BDCONTENT)
+ VALUES (BOARD_BDNO_SEQ.nextval, '자유게시판' ,'제목',1,'댓글내용입니다.');
+ 
 
-
-
+ INSERT INTO REPLY(RPNO, BDNO,MEMNO,RPCOMMENT)
+ VALUES (REPLY_RPNO_SEQ.nextval, BOARD_BDNO_SEQ.currval, 1,'댓글내용');
 
 
 
