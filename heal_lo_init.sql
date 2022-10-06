@@ -38,7 +38,7 @@ insert into code values('CD000','캘린더','',null,'Y',systimestamp,systimestamp);
 -- 회원
 create table member (
                         memno          number(8),
-                        memid          varchar2(40),
+                        memid          varchar2(100),
                         mempw          varchar2(20),
                         memtel         varchar2(13),
                         memnickname    varchar2(30),
@@ -53,7 +53,7 @@ create table member (
 -- 제약조건
 alter table member add constraint member_memno_pk primary key (memno);
 alter table member modify memid constraint member_memid_nn NOT NULL;
-alter table member modify mempw constraint member_mempw_nn NOT NULL;
+-- alter table member modify mempw constraint member_mempw_nn NOT NULL;
 alter table member modify memtel constraint member_memtel_nn NOT NULL;
 alter table member modify memnickname constraint member_memnickname_nn NOT NULL;
 alter table member modify mememail constraint member_mememail_nn NOT NULL;
@@ -61,10 +61,9 @@ alter table member modify memname constraint member_memname_nn NOT NULL;
 alter table member modify memcdate constraint member_memcdate_nn NOT NULL;
 alter table member modify memudate constraint member_memudate_nn NOT NULL;
 alter table member add constraint memid_uk unique (memid);
-alter table member add constraint memtel_uk unique (memtel);
 alter table member add constraint memnickname_uk unique (memnickname);
 alter table member add constraint mememail_uk unique (mememail);
-alter table member add constraint memcode_ck check(memcode in ('NORMAL','ADMIN'));
+alter table member add constraint memcode_ck check(memcode in ('NORMAL','ADMIN', 'SNS'));
 alter table member add constraint memstatus_ck check(memstatus in ('JOIN','WITHDRAW'));
 
 -- 회원 시퀀스
@@ -204,11 +203,13 @@ alter table uploadfile add constraint uploadfile_ufsname_uk unique (ufsname);
 -- 댓글테이블
 CREATE TABLE REPLY (
                        RPNO        NUMBER(8),
-                       BDNO 		    NUMBER(8),
+                       BDNO 		   NUMBER(8),
                        RPGROUP     NUMBER(10),
                        RPDEPTH     NUMBER(10),
+                       RPSTEP      NUMBER(10),
+                       RPSTATUS    VARCHAR2(15),
                        MEMNO       NUMBER(8),
-                       RPCOMMENT 	CLOB,
+                       RPCOMMENT 	 CLOB,
                        RPCDATE     timestamp default systimestamp,
                        RPUDATE     timestamp default systimestamp
 );
@@ -228,3 +229,4 @@ ALTER TABLE REPLY MODIFY MEMNO CONSTRAINT REPLY_MEMNO_NN NOT NULL;
 ALTER TABLE REPLY MODIFY RPCOMMENT CONSTRAINT REPLY_RPCOMMENT_NN NOT NULL;
 ALTER TABLE REPLY MODIFY RPCDATE CONSTRAINT BOARD_RPCDATE_NN NOT NULL;
 ALTER TABLE REPLY MODIFY RPUDATE CONSTRAINT BOARD_RPUDATE_NN NOT NULL;
+ALTER TABLE REPLY ADD CONSTRAINT RPSTATUS_CK CHECK(RPSTATUS IN ('POST', 'DELETED'));

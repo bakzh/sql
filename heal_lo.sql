@@ -33,7 +33,7 @@
  insert into member values (member_memno_seq.nextval ,'admin' ,'admin123' ,'010-1234-5678' ,'닉네임'
                             ,'heallo123@naver.com' ,'테스트' ,'ADMIN','JOIN' ,sysdate ,sysdate );
 
-delete member where memno = 61;
+delete member where memno = 23;
 select * from member;
 select * from review;
 
