@@ -19,7 +19,37 @@
                                     t3.memnickname like '%헬로입니다%'
       order by no asc;
 
+delete review where memno = 16;
 
+insert into review
+values(review_rvno_seq.nextval, '시설도 깔끔하고 트레이너분들이 친절하시네요. 한 번쯤 가볼만 할 것 같아요~!',0, 4.5, sysdate, sysdate, 3, 3075);
+
+insert into review
+values(review_rvno_seq.nextval, '아랫분 리뷰보고 갔다왔는데 분위기 좋은 것 같네요 ㅎㅎ',0, 3.0, sysdate, sysdate, 9, 3075);
+
+insert into review
+values(review_rvno_seq.nextval, '기구 상태도 좋고 나쁘지 않네요~^^ㅎㅎ',0, 3.5, sysdate, sysdate, 10, 3116); 
+
+insert into review
+values(review_rvno_seq.nextval, '확실히 다른 곳이랑 기구차이가 나네요 추천합니다~!~!',0, 4.0, sysdate, sysdate, 7, 3116); 
+
+insert into review
+values(review_rvno_seq.nextval, '관장님도 좋으신 분이고 기본기도 잘 잡아주시는 것 같아요. 금방 느는 느낌이 드네요 ㅎㅎ',0, 5.0, sysdate, sysdate, 7, 5142);
+
+update facility set
+    fcscore = (select nvl(round(avg(rvscore),1),0) rvavg from review
+               where review.fcno = 3075)
+where fcno = 3075;
+
+update facility set
+    fcscore = (select nvl(round(avg(rvscore),1),0) rvavg from review
+               where review.fcno = 3116)
+where fcno = 3116;
+
+update facility set
+    fcscore = (select nvl(round(avg(rvscore),1),0) rvavg from review
+               where review.fcno = 5142)
+where fcno = 5142;
 
 
 
@@ -32,8 +62,8 @@
  
  insert into member values (member_memno_seq.nextval ,'admin' ,'admin123' ,'010-1234-5678' ,'닉네임'
                             ,'heallo123@naver.com' ,'테스트' ,'ADMIN','JOIN' ,sysdate ,sysdate );
-
-delete member where memno = 23;
+update member set memstatus = 'JOIN' where memno = 11;
+delete member where memno = 16;
 select * from member;
 select * from review;
 
